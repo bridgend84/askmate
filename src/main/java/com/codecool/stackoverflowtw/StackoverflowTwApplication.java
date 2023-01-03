@@ -9,8 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 @SpringBootApplication
 public class StackoverflowTwApplication {
@@ -21,14 +20,14 @@ public class StackoverflowTwApplication {
                 "jdbc:postgresql://localhost:5432/askmate",
                 "postgres",
                 "");
-        Map<String, String> tables = Map.of(
-                "users", TableStatements.USERS,
-                "questions", TableStatements.QUESTIONS,
-                "answer", TableStatements.ANSWER,
-                "tags", TableStatements.TAGS,
-                "question_tags", TableStatements.QUESTION_TAGS
-        );
-        TableInitializer tableInitializer = new TableInitializer(database, tables);
+        Map<String, String> table = new LinkedHashMap<>();
+        table.put("users", TableStatements.USERS);
+        table.put("questions", TableStatements.QUESTIONS);
+        table.put("answer", TableStatements.ANSWER);
+        table.put("tags", TableStatements.TAGS);
+        table.put("question_tags", TableStatements.QUESTION_TAGS);
+
+        TableInitializer tableInitializer = new TableInitializer(database, table);
         tableInitializer.initialize();
 
         SpringApplication.run(StackoverflowTwApplication.class, args);
