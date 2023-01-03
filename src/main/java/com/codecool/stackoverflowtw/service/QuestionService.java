@@ -16,13 +16,11 @@ import java.util.List;
 
 @Service
 public class QuestionService {
-
     private QuestionsDAO questionsDAO;
-
-    @Autowired
-    public QuestionService(QuestionsDAO questionsDAO) {
-        this.questionsDAO = questionsDAO;
-    }
+    private Database database = new Database(
+            "jdbc:postgresql://localhost:5432/askmate",
+            "postgres",
+            "");
 
     private AllQuestionDTO toAllQuestionDTORecord(ResultSet resultSet) throws SQLException {
         return new AllQuestionDTO(
@@ -32,21 +30,8 @@ public class QuestionService {
         );
     }
 
-    public List<AllQuestionDTO> getAllQuestions() {
-        // TODO
-        Database database = new Database(
-                "jdbc:postgresql://localhost:5432/askmate",
-                "postgres",
-                "");
-
-        String sql = """
-                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
-                FROM questions
-                         FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY name, questions.name, questions.created;
-                """;
-
-        try (
+    private List<AllQuestionDTO> getAllQuestionDTOS(String sql) {
+        try(
                 Connection connection = database.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql)) {
@@ -55,11 +40,92 @@ public class QuestionService {
                 AllQuestionDTO question = toAllQuestionDTORecord(resultSet);
                 allQuestions.add(question);
             }
-            System.out.println(allQuestions);
             return allQuestions;
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }
+    }
+
+    @Autowired
+    public QuestionService(QuestionsDAO questionsDAO) {
+        this.questionsDAO = questionsDAO;
+    }
+
+    public List<AllQuestionDTO> getAllQuestions() {
+        String sql = """
+                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                FROM questions
+                         FULL JOIN answer ON questions.question_id = answer.question_id
+                GROUP BY name, questions.name, questions.created;
+                """;
+        return getAllQuestionDTOS(sql);
+    }
+    public List<AllQuestionDTO> getAllQuestionsSortedByNameAsc() {
+        String sql = """
+                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                FROM questions
+                         FULL JOIN answer ON questions.question_id = answer.question_id
+                GROUP BY name, questions.name, questions.created
+                ORDER BY questions.name ASC;
+                """;
+
+        return getAllQuestionDTOS(sql);
+    }
+
+    public List<AllQuestionDTO> getAllQuestionsSortedByNameDesc() {
+        String sql = """
+                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                FROM questions
+                         FULL JOIN answer ON questions.question_id = answer.question_id
+                GROUP BY name, questions.name, questions.created
+                ORDER BY questions.name DESC;
+                """;
+
+        return getAllQuestionDTOS(sql);
+    }
+
+    public List<AllQuestionDTO> getAllQuestionsSortedByDateAsc() {
+        String sql = """
+                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                FROM questions
+                         FULL JOIN answer ON questions.question_id = answer.question_id
+                GROUP BY name, questions.name, questions.created
+                ORDER BY questions.created ASC;
+                """;
+        return getAllQuestionDTOS(sql);
+    }
+
+    public List<AllQuestionDTO> getAllQuestionsSortedByDateDesc() {
+        String sql = """
+                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                FROM questions
+                         FULL JOIN answer ON questions.question_id = answer.question_id
+                GROUP BY name, questions.name, questions.created
+                ORDER BY questions.created DESC;
+                """;
+        return getAllQuestionDTOS(sql);
+    }
+
+    public List<AllQuestionDTO> getAllQuestionsSortedByAnswersAsc() {
+        String sql = """
+                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                FROM questions
+                         FULL JOIN answer ON questions.question_id = answer.question_id
+                GROUP BY name, questions.name, questions.created
+                ORDER BY answerCount ASC;
+                """;
+        return getAllQuestionDTOS(sql);
+    }
+
+    public List<AllQuestionDTO> getAllQuestionsSortedByAnswerDesc() {
+        String sql = """
+                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                FROM questions
+                         FULL JOIN answer ON questions.question_id = answer.question_id
+                GROUP BY name, questions.name, questions.created
+                ORDER BY answerCount DESC;
+                """;
+        return getAllQuestionDTOS(sql);
     }
 
     /*public QuestionDTO getQuestionById(int id) {
