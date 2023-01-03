@@ -1,7 +1,7 @@
 package com.codecool.stackoverflowtw.controller;
 
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
-import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
 import com.codecool.stackoverflowtw.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +19,20 @@ public class QuestionController {
     }
 
     @GetMapping("/all")
-    public List<QuestionDTO> getAllQuestions() {
+    public List<AllQuestionDTO> getAllQuestions() {
         return questionService.getAllQuestions();
     }
 
+    /*TODO Endpoints
+    sorted ascending by name alphabetically
+    sorted descending by name alphabetically
+    sorted ascending by date when created
+    sorted desc by date
+    sorted asc by answer count
+    sorted desc by ans c
+    */
     @GetMapping("/{id}")
-    public QuestionDTO getQuestionById(@PathVariable int id) {
+    public AllQuestionDTO getQuestionById(@PathVariable int id) {
         return null;
     }
 
