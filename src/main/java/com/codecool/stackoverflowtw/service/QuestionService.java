@@ -37,7 +37,7 @@ public class QuestionService {
         Database database = new Database(
                 "jdbc:postgresql://localhost:5432/askmate",
                 "postgres",
-                "198989");
+                "");
 
         String sql = """
                 SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
