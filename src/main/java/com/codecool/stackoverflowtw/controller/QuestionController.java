@@ -42,6 +42,11 @@ public class QuestionController {
         return null;
     }
 
+    @GetMapping("/sorted/answers-count/{direction}")
+    public List<AllQuestionDTO> getSortedQuestionsByAnswerCount(@PathVariable Direction direction) {
+        return null;
+    }
+
     @GetMapping("/{id}")
     public AllQuestionDTO getQuestionById(@PathVariable int id) {
         return null;
