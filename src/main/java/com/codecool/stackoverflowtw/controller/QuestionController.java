@@ -37,6 +37,11 @@ public class QuestionController {
         return null;
     }
 
+    @GetMapping("/sorted/date/{direction}")
+    public List<AllQuestionDTO> getSortedQuestionsByDate(@PathVariable Direction direction) {
+        return null;
+    }
+
     @GetMapping("/{id}")
     public AllQuestionDTO getQuestionById(@PathVariable int id) {
         return null;
