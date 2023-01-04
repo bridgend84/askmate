@@ -20,7 +20,7 @@ public class QuestionService {
     private Database database = new Database(
             "jdbc:postgresql://localhost:5432/askmate",
             "postgres",
-            "");
+            "Lelolek97");
 
     private AllQuestionDTO toAllQuestionDTORecord(ResultSet resultSet) throws SQLException {
         return new AllQuestionDTO(
@@ -30,7 +30,7 @@ public class QuestionService {
         );
     }
 
-    private List<AllQuestionDTO> getAllQuestionDTOS(String sql) {
+    private List<AllQuestionDTO> queryController(String sql) {
         try(
                 Connection connection = database.getConnection();
                 Statement statement = connection.createStatement();
@@ -58,7 +58,7 @@ public class QuestionService {
                          FULL JOIN answer ON questions.question_id = answer.question_id
                 GROUP BY name, questions.name, questions.created;
                 """;
-        return getAllQuestionDTOS(sql);
+        return queryController(sql);
     }
     public List<AllQuestionDTO> getAllQuestionsSortedByNameAsc() {
         String sql = """
@@ -69,7 +69,7 @@ public class QuestionService {
                 ORDER BY questions.name ASC;
                 """;
 
-        return getAllQuestionDTOS(sql);
+        return queryController(sql);
     }
 
     public List<AllQuestionDTO> getAllQuestionsSortedByNameDesc() {
@@ -81,7 +81,7 @@ public class QuestionService {
                 ORDER BY questions.name DESC;
                 """;
 
-        return getAllQuestionDTOS(sql);
+        return queryController(sql);
     }
 
     public List<AllQuestionDTO> getAllQuestionsSortedByDateAsc() {
@@ -92,7 +92,7 @@ public class QuestionService {
                 GROUP BY name, questions.name, questions.created
                 ORDER BY questions.created ASC;
                 """;
-        return getAllQuestionDTOS(sql);
+        return queryController(sql);
     }
 
     public List<AllQuestionDTO> getAllQuestionsSortedByDateDesc() {
@@ -103,7 +103,7 @@ public class QuestionService {
                 GROUP BY name, questions.name, questions.created
                 ORDER BY questions.created DESC;
                 """;
-        return getAllQuestionDTOS(sql);
+        return queryController(sql);
     }
 
     public List<AllQuestionDTO> getAllQuestionsSortedByAnswersAsc() {
@@ -114,7 +114,7 @@ public class QuestionService {
                 GROUP BY name, questions.name, questions.created
                 ORDER BY answerCount ASC;
                 """;
-        return getAllQuestionDTOS(sql);
+        return queryController(sql);
     }
 
     public List<AllQuestionDTO> getAllQuestionsSortedByAnswerDesc() {
@@ -125,7 +125,7 @@ public class QuestionService {
                 GROUP BY name, questions.name, questions.created
                 ORDER BY answerCount DESC;
                 """;
-        return getAllQuestionDTOS(sql);
+        return queryController(sql);
     }
 
     /*public QuestionDTO getQuestionById(int id) {
