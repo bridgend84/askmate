@@ -5,6 +5,7 @@ import com.codecool.stackoverflowtw.dao.QuestionsDaoJdbc;
 import com.codecool.stackoverflowtw.database.Database;
 import com.codecool.stackoverflowtw.initialise.TableInitializer;
 import com.codecool.stackoverflowtw.initialise.TableStatements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -27,14 +28,22 @@ public class StackoverflowTwApplication {
         table.put("tags", TableStatements.TAGS);
         table.put("question_tags", TableStatements.QUESTION_TAGS);
 
-        TableInitializer tableInitializer = new TableInitializer(database, table);
-        tableInitializer.initialize();
+        //TableInitializer tableInitializer = new TableInitializer(database, table);
+        //tableInitializer.initialize();
 
         SpringApplication.run(StackoverflowTwApplication.class, args);
     }
-
+    @Value( "${password}" )
+    String PASSWORD;
     @Bean
     public QuestionsDAO questionsDAO() {
         return new QuestionsDaoJdbc();
+    }
+
+    @Bean
+    public Database getDatabase() {
+        return new Database("jdbc:postgresql://localhost:5432/askmate",
+                "postgres",
+                PASSWORD);
     }
 }
