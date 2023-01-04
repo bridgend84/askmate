@@ -7,10 +7,7 @@ import com.codecool.stackoverflowtw.database.Database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +28,7 @@ public class QuestionService {
     }
 
     private List<AllQuestionDTO> queryController(String sql) {
-        try(
+        try (
                 Connection connection = database.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql)) {
@@ -45,6 +42,7 @@ public class QuestionService {
             throw new RuntimeException(exception);
         }
     }
+
 
     @Autowired
     public QuestionService(QuestionsDAO questionsDAO) {
@@ -60,6 +58,7 @@ public class QuestionService {
                 """;
         return queryController(sql);
     }
+
     public List<AllQuestionDTO> getAllQuestionsSortedByNameAsc() {
         String sql = """
                 SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
@@ -139,9 +138,29 @@ public class QuestionService {
         return false;
     }
 
-    public int addNewQuestion(NewQuestionDTO question) {
-        // TODO
-        int createdId = 0;
-        return createdId;
+//    public int addNewQuestion(NewQuestionDTO question) {
+//        // TODO
+//        String sql = """
+//                INSERT INTO questions(name, description, created)
+//                VALUES (?,?,?);
+//                """
+//        int createdId = 0;
+//        return createdId;
+//    }
+
+    public void addNewQuestion(NewQuestionDTO question) {
+        Database database = new Database("jdbc:postgresql://localhost:5432/askmate", "postgres", "19880103Secure");
+        String template = "INSERT INTO public.questions (user_id, name, description, created) VALUES (1, ?, ?, current_timestamp);";
+        try (Connection connection = database.getConnection(); PreparedStatement statement = connection.prepareStatement(template)) {
+            prepare(question, statement);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void prepare(NewQuestionDTO newQuestionDTO, PreparedStatement statement) throws SQLException {
+        statement.setString(1, newQuestionDTO.name());
+        statement.setString(2, newQuestionDTO.description());
     }
 }

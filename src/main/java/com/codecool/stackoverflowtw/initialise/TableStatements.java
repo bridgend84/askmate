@@ -8,13 +8,13 @@ public interface TableStatements {
 //    DROP TABLE IF EXISTS questions;
 //    DROP TABLE IF EXISTS users;
 
-   String USERS = """
-           CREATE TABLE users
-                       (
-                               user_id  serial PRIMARY KEY,
-                               username VARCHAR(50) UNIQUE NOT NULL
-           );
-           """;
+    String USERS = """
+            CREATE TABLE users
+                        (
+                                user_id  serial PRIMARY KEY,
+                                username VARCHAR(50) UNIQUE NOT NULL
+            );
+            """;
 
     String QUESTIONS = """
             CREATE TABLE questions
