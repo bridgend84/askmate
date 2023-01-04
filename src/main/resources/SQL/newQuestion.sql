@@ -1,0 +1,1 @@
+INSERT INTO questions (name, description, created) VALUES (?, ?, current_timestamp);

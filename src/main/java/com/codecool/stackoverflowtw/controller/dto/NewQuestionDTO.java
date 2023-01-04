@@ -1,3 +1,7 @@
 package com.codecool.stackoverflowtw.controller.dto;
 
-public record NewQuestionDTO(String title){}
+import java.sql.Date;
+
+public record NewQuestionDTO(
+        String name,
+        String description){}

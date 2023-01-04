@@ -5,22 +5,23 @@ import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
 import com.codecool.stackoverflowtw.database.Database;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class QuestionService {
     private QuestionsDAO questionsDAO;
-    private Database database = new Database(
-            "jdbc:postgresql://localhost:5432/askmate",
-            "postgres",
-            "198989");
+    private Database database;
+    @Autowired
+    public QuestionService(QuestionsDAO questionsDAO, Database database) {
+        this.questionsDAO = questionsDAO;
+        this.database = database;
+    }
 
     private AllQuestionDTO toAllQuestionDTORecord(ResultSet resultSet) throws SQLException {
         return new AllQuestionDTO(
@@ -31,7 +32,7 @@ public class QuestionService {
     }
 
     private List<AllQuestionDTO> queryController(String sql) {
-        try(
+        try (
                 Connection connection = database.getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql)) {
@@ -46,10 +47,7 @@ public class QuestionService {
         }
     }
 
-    @Autowired
-    public QuestionService(QuestionsDAO questionsDAO) {
-        this.questionsDAO = questionsDAO;
-    }
+
 
     public List<AllQuestionDTO> getAllQuestions() {
         String sql = """
@@ -60,6 +58,7 @@ public class QuestionService {
                 """;
         return queryController(sql);
     }
+
     public List<AllQuestionDTO> getAllQuestionsSortedByNameAsc() {
         String sql = """
                 SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
@@ -139,9 +138,28 @@ public class QuestionService {
         return false;
     }
 
-    public int addNewQuestion(NewQuestionDTO question) {
-        // TODO
-        int createdId = 0;
-        return createdId;
+//    public int addNewQuestion(NewQuestionDTO question) {
+//        // TODO
+//        String sql = """
+//                INSERT INTO questions(name, description, created)
+//                VALUES (?,?,?);
+//                """
+//        int createdId = 0;
+//        return createdId;
+//    }
+
+    public void addNewQuestion(NewQuestionDTO question) {
+        String template = "INSERT INTO public.questions (user_id, name, description, created) VALUES (1, ?, ?, current_timestamp);";
+        try (Connection connection = database.getConnection(); PreparedStatement statement = connection.prepareStatement(template)) {
+            prepare(question, statement);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void prepare(NewQuestionDTO newQuestionDTO, PreparedStatement statement) throws SQLException {
+        statement.setString(1, newQuestionDTO.name());
+        statement.setString(2, newQuestionDTO.description());
     }
 }
