@@ -5,6 +5,8 @@ import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
 import com.codecool.stackoverflowtw.database.Database;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
@@ -14,10 +16,12 @@ import java.util.List;
 @Service
 public class QuestionService {
     private QuestionsDAO questionsDAO;
-    private Database database = new Database(
-            "jdbc:postgresql://localhost:5432/askmate",
-            "postgres",
-            "");
+    private Database database;
+    @Autowired
+    public QuestionService(QuestionsDAO questionsDAO, Database database) {
+        this.questionsDAO = questionsDAO;
+        this.database = database;
+    }
 
     private AllQuestionDTO toAllQuestionDTORecord(ResultSet resultSet) throws SQLException {
         return new AllQuestionDTO(
@@ -44,10 +48,6 @@ public class QuestionService {
     }
 
 
-    @Autowired
-    public QuestionService(QuestionsDAO questionsDAO) {
-        this.questionsDAO = questionsDAO;
-    }
 
     public List<AllQuestionDTO> getAllQuestions() {
         String sql = """
@@ -149,7 +149,6 @@ public class QuestionService {
 //    }
 
     public void addNewQuestion(NewQuestionDTO question) {
-        Database database = new Database("jdbc:postgresql://localhost:5432/askmate", "postgres", "19880103Secure");
         String template = "INSERT INTO public.questions (user_id, name, description, created) VALUES (1, ?, ?, current_timestamp);";
         try (Connection connection = database.getConnection(); PreparedStatement statement = connection.prepareStatement(template)) {
             prepare(question, statement);
