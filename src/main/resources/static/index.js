@@ -11,6 +11,7 @@ const tableHeaderAnswerCount = document.createElement('th');
 const newButtonQuestionName = document.createElement('button');
 const newButtonCreated = document.createElement('button');
 const newButtonAnswerCount = document.createElement('button');
+const newQuestionFormDiv = document.createElement("div");
 
 async function fetchQuestions(url) {
     try {
@@ -102,4 +103,56 @@ const handleClick = (target) => {
         }
     }
 }
+
+const createFrom = () => {
+    document.body.appendChild(newQuestionFormDiv);
+    const newQuestion =
+        "<button id='newQuestionToggle'>New question</button>" +
+        "<form id=\"submit\">" +
+        "<label for=\"question\">Question:</label><br>" +
+        "<input type=\"text\" id=\"question\"><br>" +
+        "<label for=\"description\">Description:</label><br>" +
+        "<input type=\"text\" id=\"description\"><br><br>" +
+        "<input type=\"submit\" value=\"Submit\">" +
+        "</form>";
+    newQuestionFormDiv.innerHTML = newQuestion;
+    const submitBtn = document.getElementById("submit");
+    const newQuestionBtn = document.getElementById("newQuestionToggle");
+    newQuestionBtn.classList.add("hidden");
+    document.getElementById("submit").style.display = "none";
+
+    newQuestionBtn.addEventListener("click", () => {
+        if (newQuestionBtn.classList.contains("shown")) {
+            newQuestionBtn.classList.remove("shown");
+            newQuestionBtn.classList.add("hidden");
+            document.getElementById("submit").style.display = "none";
+        } else {
+            newQuestionBtn.classList.remove("hidden");
+            newQuestionBtn.classList.add("shown");
+            document.getElementById("submit").style.display = "block";
+        }
+    })
+
+    submitBtn.addEventListener("submit", () => {
+        let questionTitle = document.getElementById("question").value;
+        let questionDescription = document.getElementById("description").value;
+        postFetch("http://localhost:8080/questions/", questionTitle, questionDescription);
+    });
+}
+
+const postFetch = async (url, title, description) => {
+    console.log(title);
+    console.log(description);
+    const rawResponse = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({title, description})
+    });
+    const content = await rawResponse.json();
+    console.log(content);
+};
+
 fetchQuestions('http://localhost:8080/questions/all').then(r => createTableData(r));
+createFrom();

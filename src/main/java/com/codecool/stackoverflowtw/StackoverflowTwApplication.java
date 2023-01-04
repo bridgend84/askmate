@@ -20,7 +20,7 @@ public class StackoverflowTwApplication {
         Database database = new Database(
                 "jdbc:postgresql://localhost:5432/askmate",
                 "postgres",
-                "198989");
+                "");
         Map<String, String> table = new LinkedHashMap<>();
         table.put("users", TableStatements.USERS);
         table.put("questions", TableStatements.QUESTIONS);
