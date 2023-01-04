@@ -20,7 +20,7 @@ public class QuestionService {
     private Database database = new Database(
             "jdbc:postgresql://localhost:5432/askmate",
             "postgres",
-            "Lelolek97");
+            "");
 
     private AllQuestionDTO toAllQuestionDTORecord(ResultSet resultSet) throws SQLException {
         return new AllQuestionDTO(
