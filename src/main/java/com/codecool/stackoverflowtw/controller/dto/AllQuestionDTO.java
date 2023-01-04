@@ -1,7 +1,9 @@
 package com.codecool.stackoverflowtw.controller.dto;
 
+import java.sql.Date;
+
 public record AllQuestionDTO(
         String name,
-        java.sql.Date created,
+        Date created,
         int answerCount) {
 }
