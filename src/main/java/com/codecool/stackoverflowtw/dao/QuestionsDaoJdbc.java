@@ -2,6 +2,7 @@ package com.codecool.stackoverflowtw.dao;
 
 import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.SingleQuestionDTO;
 import com.codecool.stackoverflowtw.database.Database;
 import com.codecool.stackoverflowtw.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     private AllQuestionDTO toAllQuestionDTORecord(ResultSet resultSet) throws SQLException {
         return new AllQuestionDTO(
+                resultSet.getInt("question_id"),
                 resultSet.getString("name"),
                 resultSet.getDate("created"),
                 resultSet.getInt("answerCount")
@@ -43,20 +45,20 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     public List<AllQuestionDTO> getAllQuestions() {
         String sql = """
-                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
                 FROM questions
                          FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY name, questions.name, questions.created;
+                GROUP BY name, questions.name, questions.created, questions.question_id;
                 """;
         return queryController(sql);
     }
 
     public List<AllQuestionDTO> getAllQuestionsSortedByNameAsc() {
         String sql = """
-                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
                 FROM questions
                          FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY name, questions.name, questions.created
+                GROUP BY questions.question_id, name, questions.name, questions.created
                 ORDER BY questions.name ASC;
                 """;
 
@@ -65,10 +67,10 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     public List<AllQuestionDTO> getAllQuestionsSortedByNameDesc() {
         String sql = """
-                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
                 FROM questions
                          FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY name, questions.name, questions.created
+                GROUP BY questions.question_id, name, questions.name, questions.created
                 ORDER BY questions.name DESC;
                 """;
 
@@ -77,10 +79,10 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     public List<AllQuestionDTO> getAllQuestionsSortedByDateAsc() {
         String sql = """
-                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
                 FROM questions
                          FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY name, questions.name, questions.created
+                GROUP BY questions.question_id, name, questions.name, questions.created
                 ORDER BY questions.created ASC;
                 """;
         return queryController(sql);
@@ -88,10 +90,10 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     public List<AllQuestionDTO> getAllQuestionsSortedByDateDesc() {
         String sql = """
-                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
                 FROM questions
                          FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY name, questions.name, questions.created
+                GROUP BY questions.question_id, name, questions.name, questions.created
                 ORDER BY questions.created DESC;
                 """;
         return queryController(sql);
@@ -99,10 +101,10 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     public List<AllQuestionDTO> getAllQuestionsSortedByAnswersAsc() {
         String sql = """
-                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
                 FROM questions
                          FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY name, questions.name, questions.created
+                GROUP BY questions.question_id, name, questions.name, questions.created
                 ORDER BY answerCount ASC;
                 """;
         return queryController(sql);
@@ -110,10 +112,10 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     public List<AllQuestionDTO> getAllQuestionsSortedByAnswerDesc() {
         String sql = """
-                SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
+                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
                 FROM questions
                          FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY name, questions.name, questions.created
+                GROUP BY questions.question_id, name, questions.name, questions.created
                 ORDER BY answerCount DESC;
                 """;
         return queryController(sql);
@@ -132,5 +134,39 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     private void prepare(NewQuestionDTO newQuestionDTO, PreparedStatement statement) throws SQLException {
         statement.setString(1, newQuestionDTO.name());
         statement.setString(2, newQuestionDTO.description());
+    }
+
+    private SingleQuestionDTO queryControllerPlusPlus(String sql) {
+        try (
+                Connection connection = database.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql)) {
+            List<SingleQuestionDTO> allQuestions = new ArrayList<>();
+            while (resultSet.next()) {
+                SingleQuestionDTO question = toSingleQuestionDTORecord(resultSet);
+                allQuestions.add(question);
+            }
+            return allQuestions.get(0);
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    private SingleQuestionDTO toSingleQuestionDTORecord(ResultSet resultSet) throws SQLException {
+        return new SingleQuestionDTO(
+                resultSet.getString("name"),
+                resultSet.getString("description"),
+                resultSet.getString("username")
+        );
+    }
+
+    public SingleQuestionDTO getQuestionById(int id) {
+        String sql =
+                "SELECT questions.name, questions.description, users.username " +
+                        "FROM questions " +
+                        "FULL JOIN users on questions.user_id = users.user_id WHERE questions.question_id = "
+                        + id + ";";
+        System.out.println(id);
+        return queryControllerPlusPlus(sql);
     }
 }

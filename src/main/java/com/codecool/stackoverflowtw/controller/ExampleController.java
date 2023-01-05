@@ -16,6 +16,12 @@ public class ExampleController {
         return "index";
     }
 
+    @GetMapping("/question/{id}")
+    public String question(@PathVariable int id) {
+        System.out.println(id);
+        return "question";
+    }
+
     @GetMapping("/path/{name}")
     public String exampleWithPathVariable(@PathVariable String name, Model model) {
         model.addAttribute("name", name);

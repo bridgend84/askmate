@@ -41,10 +41,15 @@ function createTableData(questions) {
 
     for (const question of questions) {
         const row = document.createElement('tr');
-        for (const value of Object.values(question)) {
+        let questionId = question.id;
+        console.log(questionId)
+        row.className = questionId
+
+        for (let i = 1; i<Object.keys(question).length; i++) {
             const col = document.createElement('td');
             col.className = 'page-table-cell';
-            col.textContent = value;
+            col.innerHTML = `<a href="http://localhost:8080/question/${questionId}">` + Object.values(question)[i] + '</a>';
+
             row.appendChild(col);
         }
         table.appendChild(row);
@@ -114,7 +119,7 @@ const createFrom = () => {
         "<input type=\"text\" id=\"question\" placeholder=\"Question title\">" +
         "<label for=\"description\">Description:</label>" +
         "<input type=\"text\" id=\"description\" placeholder=\"Type in your question\">" +
-        "<input id=\"submit-button\" type=\"submit\" value=\"Submit\">"
+        "<input id=\"submit-button\" type=\"submit\" value=\"Submit\">" +
         "</form>";
     newQuestionFormDiv.innerHTML = newQuestion;
     const submitBtn = document.getElementById("submit");
@@ -134,11 +139,11 @@ const createFrom = () => {
         }
     })
 
-    submitBtn.addEventListener("submit", () => {
+    submitBtn.addEventListener("submit", async () => {
         let questionTitle = document.getElementById("question").value;
         let questionDescription = document.getElementById("description").value;
         postFetch("http://localhost:8080/questions/", questionTitle, questionDescription)
-            .then(fetchQuestions())
+            .then(await fetchQuestions())
 
     });
 }

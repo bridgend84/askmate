@@ -3,6 +3,7 @@ package com.codecool.stackoverflowtw.controller;
 import com.codecool.stackoverflowtw.controller.dto.Direction;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.SingleQuestionDTO;
 import com.codecool.stackoverflowtw.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,10 @@ public class QuestionController {
         return questionService.getAllQuestions();
     }
 
+    @GetMapping("/{id}")
+    public SingleQuestionDTO getQuestionById(@PathVariable int id) {
+        return questionService.getQuestionById(id);
+    }
    /* Fedaféle megoldás
    @GetMapping("/all/sorted/name/asc")
     public List<AllQuestionDTO> getAllQuestionsSortedByNameAsc() {
@@ -62,10 +67,7 @@ public class QuestionController {
         }
     }
 
-    @GetMapping("/{id}")
-    public AllQuestionDTO getQuestionById(@PathVariable int id) {
-        return null;
-    }
+
 
     @PostMapping("/")
     public void addNewQuestion(@RequestBody NewQuestionDTO question) {

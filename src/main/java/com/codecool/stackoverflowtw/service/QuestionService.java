@@ -1,5 +1,6 @@
 package com.codecool.stackoverflowtw.service;
 
+import com.codecool.stackoverflowtw.controller.dto.SingleQuestionDTO;
 import com.codecool.stackoverflowtw.dao.QuestionsDAO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
@@ -8,11 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
 public class QuestionService {
     private QuestionsDAO questionsDAO;
+
     @Autowired
     public QuestionService(QuestionsDAO questionsDAO) {
         this.questionsDAO = questionsDAO;
@@ -69,5 +73,9 @@ public class QuestionService {
 
     public void addNewQuestion(NewQuestionDTO question) {
         questionsDAO.addNewQuestion(question);
+    }
+
+    public SingleQuestionDTO getQuestionById(int id) {
+        return questionsDAO.getQuestionById(id);
     }
 }
