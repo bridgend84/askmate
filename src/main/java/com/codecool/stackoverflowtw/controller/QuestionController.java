@@ -26,8 +26,8 @@ public class QuestionController {
     }
 
     @GetMapping("/{id}")
-    public List<SingleQuestionDTO> getQuestionById(@PathVariable int id) {
-        return null;
+    public SingleQuestionDTO getQuestionById(@PathVariable int id) {
+        return questionService.getQuestionById(id);
     }
    /* Fedaféle megoldás
    @GetMapping("/all/sorted/name/asc")
