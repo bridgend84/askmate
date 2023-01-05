@@ -7,7 +7,7 @@ public class Question {
     private int user_id;
     private String name;
     private String description;
-    private java.sql.Date created;
+    private Date created;
 
     public Question(int question_id, int user_id, String name, String description, Date created) {
         this.question_id = question_id;

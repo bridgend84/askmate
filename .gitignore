@@ -27,3 +27,7 @@ target/
 .idea/
 /mvnw
 /mvnw.cmd
+
+# password
+
+/src/main/resources/application.properties

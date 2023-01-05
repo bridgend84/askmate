@@ -2,7 +2,8 @@
 
 * {
     margin: 0;
-    padding: 0;
+    padding: 0 !important;
+    border: 0 !important;
     font-family: 'Raleway', sans-serif;
     font-size: 1rem;
     color: white;
@@ -104,4 +105,71 @@ th > button:hover {
 
 .page-table-cell:hover {
     background-color: darkgray;
+}
+
+.page-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+#newQuestionToggle {
+    font-weight: 600;
+    font-size: 1.2rem;
+    border-width: 0;
+    height: 3rem;
+    color: #202124 !important;
+    width: 65%;
+}
+
+#newQuestionToggle:hover {
+    background-color: greenyellow;
+    color: #202124;
+    font-size: 1.3rem;
+}
+
+#submit {
+    flex-direction: column;
+    align-items: center;
+}
+
+#submit > label {
+    background-color: red;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.2rem;
+    border-width: 0;
+}
+
+#submit > input {
+    font-weight: 600;
+    font-size: 1.2rem;
+    border-width: 0;
+    width: 100%;
+    height: 3rem;
+    color: #202124 !important;
+}
+
+#submit-button:hover {
+    background-color: greenyellow;
+    color: #202124;
+    font-size: 1.3rem;
+}
+
+#question {
+    height: 3rem;
+    color: #202124;
+    text-indent: 0.5rem;
+    font-size: 1.2rem;
+}
+
+#description {
+    height: 3rem;
+    color: #202124;
+    text-indent: 0.5rem;
 }
