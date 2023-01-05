@@ -6,8 +6,7 @@ import java.util.List;
 public record SingleQuestionDTO(
         String name,
         String description,
-        String username,
-        List<String> answersDescription,
-        List<Date> answerCreated
+        String username
+
 ) {
 }
