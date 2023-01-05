@@ -40,10 +40,15 @@ function createTableData(questions) {
 
     for (const question of questions) {
         const row = document.createElement('tr');
-        for (const value of Object.values(question)) {
+        let questionId = question.id;
+        console.log(questionId)
+        row.className = questionId
+
+        for (let i = 1; i<Object.keys(question).length; i++) {
             const col = document.createElement('td');
             col.className = 'page-table-cell';
-            col.textContent = value;
+            col.innerHTML = `<a href= "localhost:8080/question/${questionId}">` + Object.values(question)[i] + '</a>';
+
             row.appendChild(col);
         }
         table.appendChild(row);
