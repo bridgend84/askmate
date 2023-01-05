@@ -119,7 +119,7 @@ const createFrom = () => {
         "<input type=\"text\" id=\"question\" placeholder=\"Question title\">" +
         "<label for=\"description\">Description:</label>" +
         "<input type=\"text\" id=\"description\" placeholder=\"Type in your question\">" +
-        "<input id=\"submit-button\" type=\"submit\" value=\"Submit\">"
+        "<input id=\"submit-button\" type=\"submit\" value=\"Submit\">" +
         "</form>";
     newQuestionFormDiv.innerHTML = newQuestion;
     const submitBtn = document.getElementById("submit");
