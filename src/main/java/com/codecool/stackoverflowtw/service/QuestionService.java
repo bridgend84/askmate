@@ -22,112 +22,6 @@ public class QuestionService {
         this.questionsDAO = questionsDAO;
     }
 
-    private SingleQuestionDTO queryControllerPlusPlus(String sql) {
-        try (
-                Connection connection = database.getConnection();
-                Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery(sql)) {
-            SingleQuestionDTO singleQuestion = toSingleQuestionDTORecord(resultSet);
-            return singleQuestion;
-        } catch (SQLException exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-
-
-
-    private SingleQuestionDTO toSingleQuestionDTORecord(ResultSet resultSet) throws SQLException {
-        return new SingleQuestionDTO(
-
-                resultSet.getString("name"),
-                resultSet.getString("description"),
-                resultSet.getString("username")
-        );
-    }
-
-    public List<AllQuestionDTO> getAllQuestions() {
-        String sql = """
-                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
-                FROM questions
-                         FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY questions.question_id, name, questions.name, questions.created;
-                """;
-        return queryController(sql);
-    }
-
-    public List<AllQuestionDTO> getAllQuestionsSortedByNameAsc() {
-        String sql = """
-                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
-                FROM questions
-                         FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY questions.question_id, name, questions.name, questions.created
-                ORDER BY questions.name ASC;
-                """;
-
-        return queryController(sql);
-    }
-
-    public List<AllQuestionDTO> getAllQuestionsSortedByNameDesc() {
-        String sql = """
-                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
-                FROM questions
-                         FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY questions.question_id, name, questions.name, questions.created
-                ORDER BY questions.name DESC;
-                """;
-
-        return queryController(sql);
-    }
-
-    public List<AllQuestionDTO> getAllQuestionsSortedByDateAsc() {
-        String sql = """
-                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
-                FROM questions
-                         FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY questions.question_id, name, questions.name, questions.created
-                ORDER BY questions.created ASC;
-                """;
-        return queryController(sql);
-    }
-
-    public List<AllQuestionDTO> getAllQuestionsSortedByDateDesc() {
-        String sql = """
-                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
-                FROM questions
-                         FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY questions.question_id, name, questions.name, questions.created
-                ORDER BY questions.created DESC;
-                """;
-        return queryController(sql);
-    }
-
-    public List<AllQuestionDTO> getAllQuestionsSortedByAnswersAsc() {
-        String sql = """
-                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
-                FROM questions
-                         FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY questions.question_id, name, questions.name, questions.created
-                ORDER BY answerCount ASC;
-                """;
-        return queryController(sql);
-    }
-
-    public List<AllQuestionDTO> getAllQuestionsSortedByAnswerDesc() {
-        String sql = """
-                SELECT questions.question_id, questions.name, questions.created, COUNT(answer.question_id) AS answerCount
-                FROM questions
-                         FULL JOIN answer ON questions.question_id = answer.question_id
-                GROUP BY questions.question_id, name, questions.name, questions.created
-                ORDER BY answerCount DESC;
-                """;
-        return queryController(sql);
-    }
-
-    public SingleQuestionDTO getQuestionById(int id) {
-        String sql = "SELECT questions.name, questions.description, u.username, a.description, a.created FROM questions FULL JOIN answer a on questions.question_id = a.question_id FULL JOIN users u on questions.user_id = u.user_id WHERE a.question_id == " + id + ";";
-        System.out.println(id);
-        return queryControllerPlusPlus(sql);
-    }
     /*public QuestionDTO getQuestionById(int id) {
         // TODO
         questionsDAO.sayHi();
@@ -179,5 +73,9 @@ public class QuestionService {
 
     public void addNewQuestion(NewQuestionDTO question) {
         questionsDAO.addNewQuestion(question);
+    }
+
+    public SingleQuestionDTO getQuestionById(int id) {
+        return questionsDAO.getQuestionById(id);
     }
 }

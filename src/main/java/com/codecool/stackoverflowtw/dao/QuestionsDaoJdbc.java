@@ -2,6 +2,7 @@ package com.codecool.stackoverflowtw.dao;
 
 import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.SingleQuestionDTO;
 import com.codecool.stackoverflowtw.database.Database;
 import com.codecool.stackoverflowtw.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,5 +134,39 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     private void prepare(NewQuestionDTO newQuestionDTO, PreparedStatement statement) throws SQLException {
         statement.setString(1, newQuestionDTO.name());
         statement.setString(2, newQuestionDTO.description());
+    }
+
+    private SingleQuestionDTO queryControllerPlusPlus(String sql) {
+        try (
+                Connection connection = database.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql)) {
+            List<SingleQuestionDTO> allQuestions = new ArrayList<>();
+            while (resultSet.next()) {
+                SingleQuestionDTO question = toSingleQuestionDTORecord(resultSet);
+                allQuestions.add(question);
+            }
+            return allQuestions.get(0);
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    private SingleQuestionDTO toSingleQuestionDTORecord(ResultSet resultSet) throws SQLException {
+        return new SingleQuestionDTO(
+                resultSet.getString("name"),
+                resultSet.getString("description"),
+                resultSet.getString("username")
+        );
+    }
+
+    public SingleQuestionDTO getQuestionById(int id) {
+        String sql =
+                "SELECT questions.name, questions.description, users.username " +
+                        "FROM questions " +
+                        "FULL JOIN users on questions.user_id = users.user_id WHERE questions.question_id = "
+                        + id + ";";
+        System.out.println(id);
+        return queryControllerPlusPlus(sql);
     }
 }

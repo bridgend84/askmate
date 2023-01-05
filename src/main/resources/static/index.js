@@ -48,7 +48,7 @@ function createTableData(questions) {
         for (let i = 1; i<Object.keys(question).length; i++) {
             const col = document.createElement('td');
             col.className = 'page-table-cell';
-            col.innerHTML = `<a href= "localhost:8080/question/${questionId}">` + Object.values(question)[i] + '</a>';
+            col.innerHTML = `<a href="http://localhost:8080/question/${questionId}">` + Object.values(question)[i] + '</a>';
 
             row.appendChild(col);
         }
@@ -139,11 +139,11 @@ const createFrom = () => {
         }
     })
 
-    submitBtn.addEventListener("submit", () => {
+    submitBtn.addEventListener("submit", async () => {
         let questionTitle = document.getElementById("question").value;
         let questionDescription = document.getElementById("description").value;
         postFetch("http://localhost:8080/questions/", questionTitle, questionDescription)
-            .then(fetchQuestions())
+            .then(await fetchQuestions())
 
     });
 }

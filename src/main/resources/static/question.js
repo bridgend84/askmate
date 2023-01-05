@@ -1,9 +1,9 @@
-const param = window.location.href;
+const url = window.location.href;
 
 let parts = url.split('/');
-let last = parts.pop() || parts.pop();
+let id = parts.pop();
 
-let id = last.substring(1);
+//let id = last.substring(1);
 
 async function fetchQuestion(url) {
     try {
@@ -16,4 +16,6 @@ async function fetchQuestion(url) {
 
 }
 
-fetchQuestion(`http://localhost:8080/question/${id}`)
+const valami = document.getElementById("valami");
+
+fetchQuestion(`http://localhost:8080/questions/${id}`).then(question => valami.innerHTML = question.username + " " + question.description + " " + question.name);
