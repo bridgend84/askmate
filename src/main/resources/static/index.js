@@ -12,6 +12,7 @@ const newButtonQuestionName = document.createElement('button');
 const newButtonCreated = document.createElement('button');
 const newButtonAnswerCount = document.createElement('button');
 const newQuestionFormDiv = document.createElement("div");
+newQuestionFormDiv.className = 'page-form-container';
 
 async function fetchQuestions(url) {
     try {
@@ -114,11 +115,11 @@ const createFrom = () => {
     const newQuestion =
         "<button id='newQuestionToggle'>New question</button>" +
         "<form id=\"submit\">" +
-        "<label for=\"question\">Question:</label><br>" +
-        "<input type=\"text\" id=\"question\"><br>" +
-        "<label for=\"description\">Description:</label><br>" +
-        "<input type=\"text\" id=\"description\"><br><br>" +
-        "<a href='http://localhost:8080'><input type=\"submit\" value=\"Submit\"></a>" +
+        "<label for=\"question\">Question:</label>" +
+        "<input type=\"text\" id=\"question\" placeholder=\"Question title\">" +
+        "<label for=\"description\">Description:</label>" +
+        "<input type=\"text\" id=\"description\" placeholder=\"Type in your question\">" +
+        "<input id=\"submit-button\" type=\"submit\" value=\"Submit\">"
         "</form>";
     newQuestionFormDiv.innerHTML = newQuestion;
     const submitBtn = document.getElementById("submit");
@@ -134,7 +135,7 @@ const createFrom = () => {
         } else {
             newQuestionBtn.classList.remove("hidden");
             newQuestionBtn.classList.add("shown");
-            document.getElementById("submit").style.display = "block";
+            document.getElementById("submit").style.display = "flex";
         }
     })
 
