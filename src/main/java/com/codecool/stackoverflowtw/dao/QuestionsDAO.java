@@ -1,16 +1,6 @@
 package com.codecool.stackoverflowtw.dao;
 
-import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
-import com.codecool.stackoverflowtw.controller.dto.AnswerDTO;
-import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
-import com.codecool.stackoverflowtw.controller.dto.SingleQuestionDTO;
-import com.codecool.stackoverflowtw.service.QuestionService;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
+import com.codecool.stackoverflowtw.controller.dto.*;
 import java.util.List;
 
 public interface QuestionsDAO {
@@ -24,4 +14,6 @@ public interface QuestionsDAO {
     void addNewQuestion(NewQuestionDTO question);
     SingleQuestionDTO getQuestionById(int id);
     List<AnswerDTO> getAllAnswerByQuestionId(int id);
+
+    void addNewAnswer(NewAnswerDTO answer, int id);
 }

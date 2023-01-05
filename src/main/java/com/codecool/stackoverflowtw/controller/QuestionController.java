@@ -58,12 +58,16 @@ public class QuestionController {
         }
     }
 
-
+    @PostMapping("/newanswer/{id}")
+    public void addNewAnswer(@RequestBody NewAnswerDTO answer, @PathVariable int id) {
+        questionService.addNewAnswer(answer, id);
+    }
 
     @PostMapping("/")
     public void addNewQuestion(@RequestBody NewQuestionDTO question) {
         questionService.addNewQuestion(question);
     }
+
 
     @DeleteMapping("/{id}")
     public boolean deleteQuestionById(@PathVariable int id) {
