@@ -47,8 +47,6 @@ public class QuestionService {
         }
     }
 
-
-
     public List<AllQuestionDTO> getAllQuestions() {
         String sql = """
                 SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount
@@ -58,7 +56,6 @@ public class QuestionService {
                 """;
         return queryController(sql);
     }
-
     public List<AllQuestionDTO> getAllQuestionsSortedByNameAsc() {
         String sql = """
                 SELECT questions.name, questions.created, COUNT(answer.question_id) AS answerCount

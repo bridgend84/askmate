@@ -114,7 +114,7 @@ const createFrom = () => {
         "<input type=\"text\" id=\"question\" placeholder=\"Question title\">" +
         "<label for=\"description\">Description:</label>" +
         "<input type=\"text\" id=\"description\" placeholder=\"Type in your question\">" +
-        "<input id=\"submit-button\" type=\"submit\" value=\"Submit\">" +
+        "<input id=\"submit-button\" type=\"submit\" value=\"Submit\">"
         "</form>";
     newQuestionFormDiv.innerHTML = newQuestion;
     const submitBtn = document.getElementById("submit");
@@ -137,19 +137,21 @@ const createFrom = () => {
     submitBtn.addEventListener("submit", () => {
         let questionTitle = document.getElementById("question").value;
         let questionDescription = document.getElementById("description").value;
-        postFetch("http://localhost:8080/questions/", questionTitle, questionDescription);
+        postFetch("http://localhost:8080/questions/", questionTitle, questionDescription)
+            .then(fetchQuestions())
+
     });
 }
 
-const postFetch = async (url, title, description) => {
-    console.log(title);
+const postFetch = async (url, name, description) => {
+    console.log(name);
     console.log(description);
     const rawResponse = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({title, description})
+        body: JSON.stringify({name, description})
     });
     const content = await rawResponse.json();
     console.log(content);
