@@ -1,5 +1,6 @@
 package com.codecool.stackoverflowtw.service;
 
+import com.codecool.stackoverflowtw.controller.dto.AnswerDTO;
 import com.codecool.stackoverflowtw.controller.dto.SingleQuestionDTO;
 import com.codecool.stackoverflowtw.dao.QuestionsDAO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
@@ -77,5 +78,9 @@ public class QuestionService {
 
     public SingleQuestionDTO getQuestionById(int id) {
         return questionsDAO.getQuestionById(id);
+    }
+
+    public List<AnswerDTO> getAllAnswerByQuestionId(int id){
+        return questionsDAO.getAllAnswerByQuestionId(id);
     }
 }

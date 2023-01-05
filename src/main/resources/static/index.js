@@ -149,8 +149,6 @@ const createFrom = () => {
 }
 
 const postFetch = async (url, name, description) => {
-    console.log(name);
-    console.log(description);
     const rawResponse = await fetch(url, {
         method: 'POST',
         headers: {
@@ -159,7 +157,6 @@ const postFetch = async (url, name, description) => {
         body: JSON.stringify({name, description})
     });
     const content = await rawResponse.json();
-    console.log(content);
 };
 
 fetchQuestions('http://localhost:8080/questions/all').then(r => createTableData(r));

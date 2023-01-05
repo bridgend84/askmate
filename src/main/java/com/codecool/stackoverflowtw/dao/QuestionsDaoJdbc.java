@@ -1,6 +1,7 @@
 package com.codecool.stackoverflowtw.dao;
 
 import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.AnswerDTO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.SingleQuestionDTO;
 import com.codecool.stackoverflowtw.database.Database;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class QuestionsDaoJdbc implements QuestionsDAO {
@@ -168,5 +170,35 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
                         + id + ";";
         System.out.println(id);
         return queryControllerPlusPlus(sql);
+    }
+
+    public List<AnswerDTO> queryControllerForAnswers(String sql) {
+        try (
+                Connection connection = database.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql)) {
+            List<AnswerDTO> allAnswers = new ArrayList<>();
+            while (resultSet.next()) {
+                AnswerDTO question = toAllAnswerByQuestionIdDTORecord(resultSet);
+                allAnswers.add(question);
+            }
+            return allAnswers;
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    private AnswerDTO toAllAnswerByQuestionIdDTORecord(ResultSet resultSet) throws SQLException {
+        return new AnswerDTO(
+                resultSet.getInt("question_id"),
+                resultSet.getString("description"),
+                resultSet.getDate("created")
+        );
+    }
+
+    @Override
+    public List<AnswerDTO> getAllAnswerByQuestionId(int id) {
+        String sql = "SELECT answer.question_id, answer.description, answer.created FROM answer WHERE answer.question_id = " + id + ";";
+        return queryControllerForAnswers(sql);
     }
 }

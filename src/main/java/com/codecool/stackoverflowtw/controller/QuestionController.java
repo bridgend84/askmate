@@ -1,9 +1,6 @@
 package com.codecool.stackoverflowtw.controller;
 
-import com.codecool.stackoverflowtw.controller.dto.Direction;
-import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
-import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
-import com.codecool.stackoverflowtw.controller.dto.SingleQuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.*;
 import com.codecool.stackoverflowtw.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,17 +26,11 @@ public class QuestionController {
     public SingleQuestionDTO getQuestionById(@PathVariable int id) {
         return questionService.getQuestionById(id);
     }
-   /* Fedaféle megoldás
-   @GetMapping("/all/sorted/name/asc")
-    public List<AllQuestionDTO> getAllQuestionsSortedByNameAsc() {
-        return questionService.getAllQuestionsSortedByNameAsc();
+
+    @GetMapping("/answers/{id}")
+    public List<AnswerDTO> getAllAnswersById(@PathVariable int id) {
+        return questionService.getAllAnswerByQuestionId(id);
     }
-    @GetMapping("/all/sorted/name/desc")
-    public List<AllQuestionDTO> getAllQuestionsSortedByNameDesc() {
-        return questionService.getAllQuestionsSortedByNameDesc();
-    }
-    Rékaféle:
-    */
 
     @GetMapping("/sorted/name/{direction}")
     public List<AllQuestionDTO> getSortedQuestionsByName(@PathVariable Direction direction) {

@@ -1,6 +1,7 @@
 package com.codecool.stackoverflowtw.dao;
 
 import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.AnswerDTO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.SingleQuestionDTO;
 import com.codecool.stackoverflowtw.service.QuestionService;
@@ -22,4 +23,5 @@ public interface QuestionsDAO {
     List<AllQuestionDTO> getAllQuestionsSortedByAnswerDesc();
     void addNewQuestion(NewQuestionDTO question);
     SingleQuestionDTO getQuestionById(int id);
+    List<AnswerDTO> getAllAnswerByQuestionId(int id);
 }
