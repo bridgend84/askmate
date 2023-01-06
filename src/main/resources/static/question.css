@@ -67,6 +67,7 @@ h2 {
 #answer-description {
     margin-top: 2vh !important;
     padding-top: 2vh !important;
+    font-size: 1rem;
 }
 
 #newAnswerToggle{
@@ -128,4 +129,8 @@ h2 {
     background-color: #00FF41;
     color: #202124;
     font-size: 1.3rem;
+}
+
+p, h3{
+    font-size: 1.3rem !important;
 }

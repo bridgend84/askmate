@@ -25,22 +25,28 @@ async function fetchAnswers(url) {
     }
 }
 
-fetchQuestion(`http://localhost:8080/questions/${id}`).then(question => {
-    questionDiv.innerHTML =
-        "Question by: " + question.username + " </br>"
-        + "Question about: " + question.name + "</br>"
-        + "Description: " + question.description + "</br>";
-});
-
-fetchAnswers(`http://localhost:8080/questions/answers/${id}`).then(answers => {
-    answers.map(a => {
-        questionDiv.innerHTML += `<div id="answer-description">
-    <h3>Answer</h3>
-    <p>${a.description} </p>
-    <p>${a.created} </p>
-    </div>`
+fetchQuestion(`http://localhost:8080/questions/${id}`)
+    .then(question => {
+        questionDiv.innerHTML =
+            "Question by: " + question.username + " </br>"
+            + "Question about: " + question.name + "</br>"
+            + "Description: " + question.description + "</br>";
     })
-});
+    .then(
+    fetchAnswers(`http://localhost:8080/questions/answers/${id}`)
+        .then(answers => {
+        answers.map(a => {
+            console.log(a)
+            const createDiv = document.createElement("div");
+            createDiv.innerHTML = `<div id="answer-description">
+        <h3>Answer</h3>
+        <p>${a.description} </p>
+        <p>${a.created} </p>
+        </div>`
+            questionDiv.appendChild(createDiv);
+        })
+    })
+)
 
 const createFrom = () => {
     document.body.appendChild(newQuestionFormDiv);
