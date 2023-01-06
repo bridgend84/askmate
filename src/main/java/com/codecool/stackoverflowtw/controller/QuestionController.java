@@ -70,7 +70,7 @@ public class QuestionController {
 
 
     @DeleteMapping("/{id}")
-    public boolean deleteQuestionById(@PathVariable int id) {
-        return false;
+    public  void deleteQuestionById(@PathVariable int id) {
+        questionService.deleteQuestionById(id);
     }
 }
