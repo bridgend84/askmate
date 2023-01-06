@@ -1,10 +1,7 @@
 package com.codecool.stackoverflowtw.dao;
 
-import com.codecool.stackoverflowtw.controller.dto.AllQuestionDTO;
-import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
-import com.codecool.stackoverflowtw.controller.dto.SingleQuestionDTO;
+import com.codecool.stackoverflowtw.controller.dto.*;
 import com.codecool.stackoverflowtw.database.Database;
-import com.codecool.stackoverflowtw.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.*;
@@ -169,4 +166,50 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         System.out.println(id);
         return queryControllerPlusPlus(sql);
     }
+
+    public List<AnswerDTO> queryControllerForAnswers(String sql) {
+        try (
+                Connection connection = database.getConnection();
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery(sql)) {
+            List<AnswerDTO> allAnswers = new ArrayList<>();
+            while (resultSet.next()) {
+                AnswerDTO question = toAllAnswerByQuestionIdDTORecord(resultSet);
+                allAnswers.add(question);
+            }
+            return allAnswers;
+        } catch (SQLException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    private AnswerDTO toAllAnswerByQuestionIdDTORecord(ResultSet resultSet) throws SQLException {
+        return new AnswerDTO(
+                resultSet.getInt("question_id"),
+                resultSet.getString("description"),
+                resultSet.getDate("created")
+        );
+    }
+
+    @Override
+    public List<AnswerDTO> getAllAnswerByQuestionId(int id) {
+        String sql = "SELECT answer.question_id, answer.description, answer.created FROM answer WHERE answer.question_id = " + id + ";";
+        return queryControllerForAnswers(sql);
+    }
+
+    @Override
+    public void addNewAnswer(NewAnswerDTO answer, int id) {
+        String template = "INSERT INTO public.answer ( question_id, description, created) VALUES (" + id + ", ?, current_timestamp);";
+        try (Connection connection = database.getConnection(); PreparedStatement statement = connection.prepareStatement(template)) {
+            prepareAnswer(answer, statement);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void prepareAnswer(NewAnswerDTO newAnswerDTO, PreparedStatement statement) throws SQLException {
+        statement.setString(1, newAnswerDTO.description());
+    }
+
 }
