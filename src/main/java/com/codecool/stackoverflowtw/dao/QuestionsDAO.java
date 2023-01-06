@@ -22,4 +22,5 @@ public interface QuestionsDAO {
     List<AllQuestionDTO> getAllQuestionsSortedByAnswerDesc();
     void addNewQuestion(NewQuestionDTO question);
     SingleQuestionDTO getQuestionById(int id);
+    void deleteQuestionsById(int id);
 }

@@ -169,4 +169,15 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         System.out.println(id);
         return queryControllerPlusPlus(sql);
     }
+
+    @Override
+    public void deleteQuestionsById(int id) {
+        String template = "DELETE FROM questions WHERE question_id = " + id + ";";
+        try (Connection connection = database.getConnection(); PreparedStatement statement = connection.prepareStatement(template)) {
+//            prepare(question, statement);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
