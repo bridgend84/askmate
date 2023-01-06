@@ -56,7 +56,10 @@ function createTableData(questions) {
         row.append(deleteBtn);
         table.appendChild(row);
 
-        //deleteBtn.addEventListener("click", deleteFetch("http://localhost:8080/question/", questionId).then(fetchQuestions()));
+        deleteBtn.addEventListener("click", () => deleteFetch(`http://localhost:8080/questions/${questionId}`)
+            .then(fetchQuestions('http://localhost:8080/questions/all')
+                .then(res => createTableData(res)))
+        );
     }
 }
 
@@ -162,14 +165,13 @@ const postFetch = async (url, name, description) => {
     const content = await rawResponse.json();
 };
 
-/*const deleteFetch = async (url, id) => {
-    fetch('url' + id, {
+const deleteFetch = async (url) => {
+    fetch(url, {
         method: 'DELETE'
     })
         .then(response => response.json())
-        .then(data => console.log(data))
         .catch(err => console.log(err));
-};*/
+};
 
 fetchQuestions('http://localhost:8080/questions/all').then(r => createTableData(r));
 createFrom();
