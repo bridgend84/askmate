@@ -49,11 +49,11 @@ public class QuestionService {
     }
 
     public List<AllQuestionDTO> getAllQuestionsSortedByDateAsc() {
-        return questionsDAO.getAllQuestionsSortedByDateAsc();
+        return questionsDAO.getAllQuestionsSortedByDate("ASC");
     }
 
     public List<AllQuestionDTO> getAllQuestionsSortedByDateDesc() {
-        return questionsDAO.getAllQuestionsSortedByDateDesc();
+        return questionsDAO.getAllQuestionsSortedByDate("DESC");
     }
 
     public List<AllQuestionDTO> getAllQuestionsSortedByAnswersAsc() {

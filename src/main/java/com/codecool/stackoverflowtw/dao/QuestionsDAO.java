@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface QuestionsDAO {
     List<AllQuestionDTO> getAllQuestions();
+    List<AllQuestionDTO> getAllQuestionsSortedByDate(String order);
     List<AllQuestionDTO> getAllQuestionsSortedByNameAsc();
     List<AllQuestionDTO> getAllQuestionsSortedByNameDesc();
     List<AllQuestionDTO> getAllQuestionsSortedByDateAsc();
@@ -15,6 +16,5 @@ public interface QuestionsDAO {
     SingleQuestionDTO getQuestionById(int id);
     void deleteQuestionsById(int id);
     List<AnswerDTO> getAllAnswerByQuestionId(int id);
-
     void addNewAnswer(NewAnswerDTO answer, int id);
 }
