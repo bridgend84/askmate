@@ -42,19 +42,24 @@ function createTableData(questions) {
     for (const question of questions) {
         const row = document.createElement('tr');
         let questionId = question.id;
-        console.log(questionId)
-        row.className = questionId
-
-        for (let i = 1; i<Object.keys(question).length; i++) {
+        row.className = questionId;
+        for (let i = 1; i < Object.keys(question).length; i++) {
             const col = document.createElement('td');
             col.className = 'page-table-cell';
-            col.innerHTML = `<a href="http://localhost:8080/question/${questionId}">` + Object.values(question)[i] + '</a>';
-
+            col.innerHTML = `<a class='link'href="http://localhost:8080/question/${questionId}">` + Object.values(question)[i] + '</a>';
             row.appendChild(col);
         }
+        const deleteBtn = document.createElement("button");
+        deleteBtn.innerHTML = "Delete";
+        deleteBtn.setAttribute("id", `${questionId}`);
+        deleteBtn.classList = "deleteBtn";
+        row.append(deleteBtn);
         table.appendChild(row);
+
+        //deleteBtn.addEventListener("click", deleteFetch("http://localhost:8080/question/", questionId).then(fetchQuestions()));
     }
 }
+
 
 newButtonQuestionName.addEventListener("click", (e) => {
     handleClick(e.target)
@@ -149,18 +154,22 @@ const createFrom = () => {
 }
 
 const postFetch = async (url, name, description) => {
-    console.log(name);
-    console.log(description);
     const rawResponse = await fetch(url, {
-        method: 'POST',
-        headers: {
+        method: 'POST', headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({name, description})
+        }, body: JSON.stringify({name, description})
     });
     const content = await rawResponse.json();
-    console.log(content);
 };
+
+/*const deleteFetch = async (url, id) => {
+    fetch('url' + id, {
+        method: 'DELETE'
+    })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err));
+};*/
 
 fetchQuestions('http://localhost:8080/questions/all').then(r => createTableData(r));
 createFrom();

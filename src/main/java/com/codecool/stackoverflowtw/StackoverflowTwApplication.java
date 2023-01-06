@@ -3,7 +3,6 @@ package com.codecool.stackoverflowtw;
 import com.codecool.stackoverflowtw.dao.QuestionsDAO;
 import com.codecool.stackoverflowtw.dao.QuestionsDaoJdbc;
 import com.codecool.stackoverflowtw.database.Database;
-import com.codecool.stackoverflowtw.initialise.TableInitializer;
 import com.codecool.stackoverflowtw.initialise.TableStatements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +10,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @SpringBootApplication
 public class StackoverflowTwApplication {
@@ -20,10 +20,10 @@ public class StackoverflowTwApplication {
 
     public static void main(String[] args) {
         //Init tables
-//        Database database = new Database(
-//                "jdbc:postgresql://localhost:5432/askmate",
-//                "postgres",
-//                "");
+        Database database = new Database(
+                "jdbc:postgresql://localhost:5432/askmate",
+                "postgres",
+                "");
         Map<String, String> table = new LinkedHashMap<>();
         table.put("users", TableStatements.USERS);
         table.put("questions", TableStatements.QUESTIONS);
@@ -36,6 +36,8 @@ public class StackoverflowTwApplication {
 
         SpringApplication.run(StackoverflowTwApplication.class, args);
     }
+    @Value( "${password}" )
+    String PASSWORD;
     @Bean
     public QuestionsDAO questionsDAO() {
         return new QuestionsDaoJdbc(database);
